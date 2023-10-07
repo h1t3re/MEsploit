@@ -1,0 +1,16 @@
+#!/bin/bash
+printf "Compiling memory module ...\n"
+cd mem
+make install
+printf '\n'
+printf "Compiling spliter module ...\n"
+cd ..
+cd spliter
+make install
+printf '\n'
+printf "Compiling input_output ...\n"
+cd ..
+cd input_output
+make install
+printf  '\n'
+

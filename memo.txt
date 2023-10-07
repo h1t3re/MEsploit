@@ -1,0 +1,9 @@
+Ethernet:
+	preamb: 8 bytes
+	src: 6 bytes
+	dst: 6 bytes
+	type/size: 2 bytes
+	user-data: 46 - 1500 bytes
+	FCS: 4 bytes
+
+
