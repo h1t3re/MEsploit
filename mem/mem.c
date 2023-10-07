@@ -63,28 +63,42 @@ void *mem_remem_array(void *array, char *type, int size)
 	return array;
 }
 
-int hexa_int_converter(char *digit)
+int hexa_to_int_converter(char *digit)
 {
 	for(int i = 0; i < 16; i++)
 	{
-		printf("%s = %d\n", digit, atoi(digit));
-		if(atoi(digit[0]) != 0)
-			return i;
-		else
-		{
-			if(strncmp(digit, "a", 1) == 0)
-				return 10;
-			else if(strncmp(digit, "b", 1) == 0)
-				return 11;
-			else if(strncmp(digit, "c", 1) == 0)
-				return 12;
-			else if(strncmp(digit, "d", 1) == 0)
-				return 13;
-			else if(strncmp(digit, "e", 1) == 0)
-				return 14;
-			else if(strncmp(digit, "f", 1) == 0)
-				return 15;
-		}		
+		if(strncmp(digit, "0", 1) == 0)
+			return 0;
+		else if(strncmp(digit, "1", 1) == 0)
+			return 1;
+		else if(strncmp(digit, "2", 1) == 0)
+			return 2;
+		else if(strncmp(digit, "3", 1) == 0)
+			return 3;
+		else if(strncmp(digit, "4", 1) == 0)
+			return 4;
+		else if(strncmp(digit, "5", 1) == 0)
+			return 5;
+		else if(strncmp(digit, "6", 1) == 0)
+			return 6;
+		else if(strncmp(digit, "7", 1) == 0)
+			return 7;
+		else if(strncmp(digit, "8", 1) == 0)
+			return 8;
+		else if(strncmp(digit, "9", 1) == 0)
+			return 9;
+		else if(strncmp(digit, "a", 1) == 0)
+			return 10;
+		else if(strncmp(digit, "b", 1) == 0)
+			return 11;
+		else if(strncmp(digit, "c", 1) == 0)
+			return 12;
+		else if(strncmp(digit, "d", 1) == 0)
+			return 13;
+		else if(strncmp(digit, "e", 1) == 0)
+			return 14;
+		else if(strncmp(digit, "f", 1) == 0)
+			return 15;
 	}
 	return 0;
 }
@@ -93,17 +107,11 @@ void convert_hexa_to_binary(int *binary_array, char *hexa_number, int length)
 {
 	int bit_shifted;
 	int and_result;
-	binary_array = (int *)mem_remem_array(binary_array, "int *", 0);
-	binary_array = (int *)mem_remem_array(binary_array, "int *", 4*strlen(hexa_number));
 	
-	for(int j = 0; j < length; j++)
+	for(int i = 0; i < 4; i++)
 	{
-		for(int i = 0; i < 4; i++)
-		{
-			printf("%d\n", (4*j)+i);
-			bit_shifted = 1 << i;
-			and_result = hexa_int_converter(hexa_number[j]) & 1;
-			binary_array[(4*j)+i] = and_result >> 1;
-		}
+		bit_shifted = 1 << i;
+		and_result = hexa_to_int_converter(hexa_number) & bit_shifted;
+		binary_array[i] = and_result >> i;
 	}
 }
