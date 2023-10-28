@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 int convert_hexa_to_int(char hexa)
 {
 	if(hexa == '0')
