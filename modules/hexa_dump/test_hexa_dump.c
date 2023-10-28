@@ -5,7 +5,7 @@
 int main()
 {
 	int *hexa_array = (int *)malloc(4*sizeof(int));
-	char *hexa = "123456789abcdef\0";
+	char *hexa = "0123456789abcdef\0";
 	int i = 0;
 	int j = 3;
 	while(i < 16)
