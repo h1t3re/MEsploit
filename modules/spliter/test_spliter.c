@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "../../include/input_output.h"
 #include "../../include/spliter.h"
+#include "../../include/strncmp.h"
 #include <stdio.h>
 
 int main()
@@ -9,9 +10,10 @@ int main()
 	printf("%s\n", buffer);
 	int i = 0;
 	char **array = split(buffer, " ");
-	while(array[i] != '\0')
+	while(strncmp(array[i], "\0") != 0)
 	{
-		printf("%s\n", array[i]);
+		printf("%s", array[i]);
+		printf("\n\n");
 		i = i +1;
 	}	
 	return 0;
