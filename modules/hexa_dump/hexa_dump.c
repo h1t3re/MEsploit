@@ -33,17 +33,34 @@ int convert_hexa_to_int(char hexa)
 	if(hexa == 'f')
 		return 15;
 }
+
+const int shift_mask_left(const int i)
+{
+	const int mask_shifted = 1 << i;
+	return mask_shifted;
+}
+
+const int and_operation(const int number, const int mask_shifted)
+{
+	const int and_result = number & mask_shifted;
+	return and_result;
+}
+
+const int result_shifted_right(const int result, const int i)
+{
+	const int result_shifted = result >> i;
+	return result_shifted;
+}
+
 void convert_hexa_to_binary(int *array, char hexa)
 {
-	int number = convert_hexa_to_int(hexa);
-	int mask_shifted = 0;
-	int and_result = 0;
+	const int number = convert_hexa_to_int(hexa);
 	int i = 0;
 	while(i < 4)
 	{
-		mask_shifted = 1 << i;
-		and_result = number & mask_shifted;
-		array[i] = and_result >> i; 
+		const int mask_shifted = shift_mask_left(i);
+		const int and_result = and_operation(number, mask_shifted);
+		array[i] = result_shifted_right(and_result, i); 
 		i = i +1;
 	}
 }
