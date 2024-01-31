@@ -1,0 +1,110 @@
+#include "../include/stdlib.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+typedef struct net_config{
+	char *name;
+	char *mac_addr;
+	char **ip_addr;
+	int number;
+}network_config;
+
+void print_network_config(network_config **net_conf)
+{
+	int i = 0;
+	int j = 0;
+	while(net_conf[i] != '\0')
+	{
+		printf("Network interface number %d:\n", net_conf[i]->number);
+		printf("Here mac address: %s\n", net_conf[i]->mac_addr);
+		printf("Here ip addresses:\n");
+		while(net_conf[i]->ip_addr[j] != '\0')
+		{
+			printf("%s\n", net_conf[i]->ip_addr[j]);
+			j = j +1;
+		}
+		j = 0;
+		i = i +1;
+		printf("\n\n");
+	}
+}
+
+
+
+network_config *get_network_conf()
+{
+	system("echo \"$(ip a)\" > net_conf.txt\0");
+	char *file_name = strdup("./net_conf.txt\0");
+	char *mode = strdup("r\0");
+	network_config **net_conf = (network_config **)malloc(sizeof(struct net_config *));
+	char *data;
+	char *key;
+	char *end_of_data;
+	char *numbers = strdup("123456789\0");
+	char *n = (char *)malloc(2*sizeof(char));
+	char *t = strdup(": \0");
+	char **c0;
+	char **c1;
+	char **m;
+	char *p;
+	int i = 0;
+	int j = 0;
+	int a = 0;
+	char *buffer = read_file(file_name, mode);
+	system("echo \"$(ls -A /sys/class/net | wc -l)\" > number_of_interfaces.txt\0");
+	file_name = strdup("./number_of_interfaces.txt\0");	
+	char *number_of_inter = read_file(file_name, mode);
+	int number_of_interfaces = atoi(number_of_inter);
+	if(buffer == NULL)
+		return 1;
+	while((i+1) <= number_of_interfaces)
+	{
+		net_conf[i] = (network_config *)malloc(sizeof(struct net_config));
+		net_conf[i]->number = i+1;
+		
+		snprintf(n, 2*sizeof(char), "%d\0", (i+1));
+		key = strconcatenate(n, t);
+		snprintf(n, 2*sizeof(char), "%d\0", (i+2));
+		end_of_data = strconcatenate(n, t); 
+		
+		data = get_data_by_key_until_end(buffer, key, end_of_data);
+		key = strdup("link\0");
+		c0 = get_data_by_key(data, key, -1);
+
+		p = strdup(" \0");
+		m = strsplit(strdup(c0[0]), p);
+		
+		net_conf[i]->mac_addr = strdup(m[1]);
+		key = strdup("inet\0");
+		c1 = get_data_by_key(data, key, -1);
+		net_conf[i]->ip_addr = (char **)malloc(sizeof(char *));
+		while(c1[a] != '\0')
+		{
+			m = strsplit(c1[a], p);
+			net_conf[i]->ip_addr[a] = strdup(m[1]); 
+			a = a +1;
+			net_conf[i]->ip_addr = (char **)realloc(net_conf[i]->ip_addr, (a+1)*sizeof(char *));
+		}
+		net_conf[i]->ip_addr[a] = '\0';
+		a = 0;
+		free(c0);
+		free(c1);
+		free(data);
+		free(m);
+		free(end_of_data);
+		i = i +1;
+		net_conf = (network_config **)realloc(net_conf, (i+1)*sizeof(struct net_config *));
+	}
+	net_conf[i] = '\0';
+	print_network_config(net_conf);
+	free(buffer);
+	
+	return net_conf;
+}
+
+
+int main()
+{
+	get_network_conf();
+	return 0;
+}

@@ -1,0 +1,53 @@
+#include "../include/stdlib.h"
+#include <stdlib.h>
+#include <stdio.h>
+
+int main()
+{
+	char *file_name = strdup("./net_conf.txt\0");
+	char *mode = strdup("r\0");
+	char *file_name1 = strdup("./net_conf1.txt\0");
+	char *mode1 = strdup("w\0");
+	FILE *fd = fopen(file_name1, mode1);
+	char *type = strdup("string\0");
+	char *sp = strdup("\n\0");
+	int a = 0;
+	int i = 0;
+	int j = 1;
+	char *c = '';
+	system("echo \"$(ip a)\" > net_conf.txt");	
+	char *buffer = read_file(file_name, mode);
+	int **array = (int **)malloc(sizeof(int *));
+	array[a] = (int *)malloc(sizeof(int));	
+	while(buffer[i] != '\0')
+	{
+		array[a][j-1] = convert_char_to_int(buffer[i]);
+		if(array[a][j-1] == 10)
+		{
+			printf("\n");
+			array[a][j] = 10;
+			j = 0;
+			a = a +1;
+			array = (int **)realloc(array, (a+1)*sizeof(int *));
+			array[a] = (int *)malloc(sizeof(int));
+		} 
+		j = j +1;
+		i = i +1;
+		array[a] = (int *)realloc(array[a], (j+1)*sizeof(int));
+	}
+	array[a] = (int *)malloc(sizeof(int));
+	array[a][0] = -1;
+	i = 0;
+	a = 0;
+	while(array[a][i] != -1)
+	{
+		//fwrite(, sizeof(char), 1, fd);	
+		i = i +1;
+		if(array[a][i] == 10)
+		{
+			i = 0;
+			a = a +1;
+		}
+	}
+	return 0;
+}
