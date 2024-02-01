@@ -1,5 +1,22 @@
-from scapy.all import *
 import sys
+import os
+import subprocess
+
+def check_for_root():
+	print('\nVerification of admin rights...',end="")
+	if not os.geteuid() == 0:
+		sys.exit('\nPlease run this script as rootd.')
+
+def install_binary(b=""):
+	check_for_root()
+	if not os.system('apt-get install python3-'+b)==0:
+		sys.exit('\n\nInstallation error..')
+
+try: 
+	from scapy.all import *
+except ImportError:
+	install_binary("scapy")
+	from scapy.all import *
 
 class Iface:
 	number = 0
@@ -46,23 +63,29 @@ class Iface:
 			print(ip, end="\n")
 		print("\n")	
 
+def runcommand(command=[], timeout="5"):
+    proc = subprocess.Popen(command, bufsize=0, stdout=subprocess.PIPE)
+    std_out, std_err = proc.communicate()
+    std_out = std_out.strip()
+    proc.kill()
+    return std_out, std_err
+
 def scan_for_host(iface=None):
 	iface.print_iface()
-	t = iface.get_default_ip()
+	default_ip = iface.get_default_ip()
 	reply = None
-	if not t:
+	if not default_ip:
 		return 0	
-	l = t.split(".")[:-1]
+	l = default_ip.split(".")[:-1]
 	network = l[0] + '.' + l[1] + '.' + l[2] + '.'
 	for i in range(1, 255):
 		ip = network + str(i)
 		print("Scanning "+ip+" ... ", end="")
-		sr(IP(dst=ip)/ICMP(type=8), rcv_pks=reply, timeout=1, verbose=0)
-		if reply is not None:
+		std_out, std_err = runcommand(["ping", "-c", "1", "-w", "2", ip])
+		if b'1 received' in std_out:
 			print("up", end="\n")
 		else:
 			print("down", end="\n")	
-	
 
 def main():
 	interface_number = 1
