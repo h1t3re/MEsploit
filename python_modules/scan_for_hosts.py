@@ -1,6 +1,7 @@
 import sys
 import os
 import subprocess
+import threading
 
 def check_for_root():
 	print('\nVerification of admin rights...',end="")
