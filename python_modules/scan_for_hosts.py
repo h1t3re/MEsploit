@@ -82,7 +82,7 @@ def scan_for_host(iface=None):
 	for i in range(1, 255):
 		ip = network + str(i)
 		print("Scanning "+ip+" ... ", end="")
-		std_out, std_err = runcommand(["ping", "-c", "1", "-w", "2", ip])
+		std_out, std_err = runcommand(["ping", "-c", "1", "-w", "4", ip])
 		if b'1 received' in std_out:
 			print("up", end="\n")
 		else:
