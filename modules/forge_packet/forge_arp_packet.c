@@ -1,13 +1,7 @@
 #include "../../include/stdlib.h"
-#include <unistd.h>
 #include <stdio.h>
-#include <sys/socket.h>
 #include <stdlib.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
 #include <string.h>
-#include <pthread.h>
-#include "../../include/get_network_conf.h"
 
 void convert_macaddr_to_binary(int *restrict array, const char *restrict mac_addr)
 {
@@ -65,7 +59,7 @@ void convert_ipaddr_to_binary(int *restrict array, const char *restrict ip_addr)
 	}
 }
 
-int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict snd_ipaddr, const char *restrict rcv_ipaddr)
+int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict rcv_macaddr,  const char *restrict snd_ipaddr, const char *restrict rcv_ipaddr)
 {	
 	int *HT;	//Hardware Type (*)
 	int *PT;	//Protocol Type (*)
@@ -79,20 +73,20 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict snd
 	int *T_L32;	//Target L32  (* same as Target IPv4 address for ARP)
 	int *T_NID;	//Target Node Identifier (8 bytes)
 	int *restrict sender_macaddr = (int *)malloc((12*4)*sizeof(int));
+	int *restrict receiver_macaddr = (int *)malloc((12*4)*sizeof(int));
 	int *restrict sender_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
-	convert_macaddr_to_binary(sender_macaddr, snd_macaddr);
-	convert_ipaddr_to_binary(sender_ipaddr, snd_ipaddr);
+	int *restrict receiver_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
+	int *restrict array;
 	int i = 0;
-	/*while(i < (12*4))
+	convert_macaddr_to_binary(sender_macaddr, snd_macaddr);
+	convert_macaddr_to_binary(receiver_macaddr, rcv_macaddr);
+	convert_ipaddr_to_binary(sender_ipaddr, snd_ipaddr);
+	convert_ipaddr_to_binary(receiver_ipaddr, rcv_ipaddr);
+	array = concatenate_int_arrays(sender_macaddr, (12*4), receiver_macaddr, (12*4)); 	
+	array = concatenate_int_arrays(array, 2*(12*4), )
+	while(i < 2*(12*4))
 	{
-		printf("%d ", sender_macaddr[i]);
-		i = i +1;
-	}
-	printf("\n");
-	i = 0;*/
-	while(i < (8*4))
-	{
-		printf("%d ", sender_ipaddr[i]);
+		printf("%d ", array[i]);
 		i = i +1;
 	}
 	printf("\n");
@@ -101,8 +95,6 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict snd
 
 int main()
 {
-	network_config **sender = get_network_conf();
-	network_config *receiver;
-	forge_arp_packet(strdup("11:11:11:11:ff:ff\0"), strdup("192.168.1.24\0"), strdup("00:00:00:00:00:00\0"));
+	forge_arp_packet(strdup("ff:ff:ff:ff:ff:ff\0"), strdup("ff:ff:ff:ff:ff:ff\0"), strdup("192.168.1.24\0"), strdup("192.168.1.254\0"));
 	return 0;
 }
