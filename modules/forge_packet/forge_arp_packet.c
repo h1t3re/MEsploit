@@ -72,17 +72,17 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict rcv
 	int *T_HA;	//Target Hardware Address (*)
 	int *T_L32;	//Target L32  (* same as Target IPv4 address for ARP)
 	int *T_NID;	//Target Node Identifier (8 bytes)
-	int *restrict sender_macaddr = (int *)malloc((12*4)*sizeof(int));
-	int *restrict receiver_macaddr = (int *)malloc((12*4)*sizeof(int));
-	int *restrict sender_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
-	int *restrict receiver_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
-	int *restrict array;
-	int *restrict type[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0};
-	int *restrict hwtype[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-	int *restrict protocoltype[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	int *restrict hwsize[] = {0, 0, 0, 0, 0, 1, 1, 0};	
-	int *restrict protocolsize[] = {0, 0, 0, 0, 0, 1, 0, 0};	
-	int *restrict opcode[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+	int *sender_macaddr = (int *)malloc((12*4)*sizeof(int));
+	int *receiver_macaddr = (int *)malloc((12*4)*sizeof(int));
+	int *sender_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
+	int *receiver_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
+	int *array;
+	int type[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0};
+	int hwtype[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+	int protocoltype[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int hwsize[] = {0, 0, 0, 0, 0, 1, 1, 0};	
+	int protocolsize[] = {0, 0, 0, 0, 0, 1, 0, 0};	
+	int opcode[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
 	int i = 0;
 	convert_macaddr_to_binary(sender_macaddr, snd_macaddr);
 	convert_macaddr_to_binary(receiver_macaddr, rcv_macaddr);
@@ -92,16 +92,16 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict rcv
 	array = concatenate_int_arrays(array, 2*(12*4), type, 16);
 	array = concatenate_int_arrays(array, 2*(12*4)+16, hwtype, 16);
 	array = concatenate_int_arrays(array, 2*(12*4)+16+16, protocoltype, 16);
-	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8, hwsize, 16);
-	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+8, protocolsize, 16);
-	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16, opcode, 16);
-	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(12*4), sender_macaddr, (12*4));
-	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(12*4)+32, sender_ipaddr, 32);
-	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(2*(12*4))+32, receiver_macaddr, (12*4));
-	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(2*(12*4))+(2*32), receiver_ipaddr, 32);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+16, hwsize, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+16+16, protocolsize, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+16+16+16, opcode, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+16+16+16+16, sender_macaddr, (12*4));
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+16+16+16+16+(12*4), sender_ipaddr, 32);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+16+16+16+16+(12*4)+32, receiver_macaddr, (12*4));
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+16+16+16+16+(12*4)+32+(12*4), receiver_ipaddr, 32);
 	while(i < 2*(12*4)+16+16+8+16+(2*(12*4))+(2*32))
 	{
-		printf("%d ", array[i]);
+		printf("%d", array[i]);
 		i = i +1;
 	}
 	printf("\n");
