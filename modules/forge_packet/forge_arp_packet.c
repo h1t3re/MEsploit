@@ -105,7 +105,7 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict rcv
 		i = i +1;
 	}
 	printf("\n");
-	return 0;
+	return array;
 }
 
 int main()
