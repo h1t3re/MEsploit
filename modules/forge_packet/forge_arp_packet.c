@@ -77,12 +77,12 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict rcv
 	int *restrict sender_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
 	int *restrict receiver_ipaddr = (int *)malloc((8*4)*sizeof(int)); 
 	int *restrict array;
-	int *restrict type = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0];
-	int *restrict hwtype = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
-	int *restrict protocoltype = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-	int *restrict hwsize = [0, 0, 0, 0, 0, 1, 1, 0];	
-	int *restrict protocolsize = [0, 0, 0, 0, 0, 1, 0, 0];	
-	int *restrict opcode = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+	int *restrict type[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0};
+	int *restrict hwtype[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+	int *restrict protocoltype[] = {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	int *restrict hwsize[] = {0, 0, 0, 0, 0, 1, 1, 0};	
+	int *restrict protocolsize[] = {0, 0, 0, 0, 0, 1, 0, 0};	
+	int *restrict opcode[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
 	int i = 0;
 	convert_macaddr_to_binary(sender_macaddr, snd_macaddr);
 	convert_macaddr_to_binary(receiver_macaddr, rcv_macaddr);
@@ -90,7 +90,16 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict rcv
 	convert_ipaddr_to_binary(receiver_ipaddr, rcv_ipaddr);
 	array = concatenate_int_arrays(sender_macaddr, (12*4), receiver_macaddr, (12*4)); 	
 	array = concatenate_int_arrays(array, 2*(12*4), type, 16);
-	while(i < 2*(12*4)+16)
+	array = concatenate_int_arrays(array, 2*(12*4)+16, hwtype, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16, protocoltype, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8, hwsize, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+8, protocolsize, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16, opcode, 16);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(12*4), sender_macaddr, (12*4));
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(12*4)+32, sender_ipaddr, 32);
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(2*(12*4))+32, receiver_macaddr, (12*4));
+	array = concatenate_int_arrays(array, 2*(12*4)+16+16+8+16+(2*(12*4))+(2*32), receiver_ipaddr, 32);
+	while(i < 2*(12*4)+16+16+8+16+(2*(12*4))+(2*32))
 	{
 		printf("%d ", array[i]);
 		i = i +1;
