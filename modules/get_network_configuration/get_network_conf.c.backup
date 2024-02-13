@@ -17,7 +17,6 @@ int print_network_interface(network_config *net_conf)
 	return 0;
 }
 
-
 int print_network_config(network_config **net_conf)
 {
 	int i = 0;
@@ -53,7 +52,7 @@ int free_network_config_struct(network_config **net_conf)
 network_config **get_network_conf()
 {
 	system("echo \"$(ip a)\" > net_conf.txt\0");
-	char *file_name = strdup("./net_conf.txt\0");
+	char *file_name = strdup("/home/h1t3re/MEsploit/modules/get_network_conf/net_conf.txt\0");
 	char *mode = strdup("r\0");
 	network_config **net_conf = (network_config **)malloc(sizeof(struct net_config *));
 	char *data;
@@ -69,10 +68,10 @@ network_config **get_network_conf()
 	char *interface_name;
 	int i = 0;
 	int a = 0;
-	char *buffer = read_file(file_name, mode);
+	char *buffer = read_file(file_name);
 	system("echo \"$(ls -A /sys/class/net | wc -l)\" > number_of_interfaces.txt\0");
 	file_name = strdup("./number_of_interfaces.txt\0");	
-	char *number_of_inter = read_file(file_name, mode);
+	char *number_of_inter = read_file(file_name);
 	int number_of_interfaces = atoi(number_of_inter);
 	while((i+1) <= number_of_interfaces)
 	{
