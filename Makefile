@@ -1,6 +1,8 @@
-install: 
-	cd stdlib && make install && cd ..
-	cd modules/get_network_conf && make install && cd ../..
-	
-compile: install
-	gcc -Wall -g lib/stdlib.o lib/get_network_conf.o MEsploit.c -o MEsploit
+compile_stdlib: stdlib/stdlib.c stdlib/stdlib.h	
+	cd stdlib; make install; cd ..
+
+compile_modules: modules/
+	cd modules; make install; cd ..
+
+compile: compile_stdlib compile_modules
+	gcc -Wall -g lib/stdlib.o lib/get_network_configuration.o MEsploit.c -o MEsploit
