@@ -107,9 +107,3 @@ int *forge_arp_packet(const char *restrict snd_macaddr, const char *restrict rcv
 	printf("\n");
 	return array;
 }
-
-int main()
-{
-	forge_arp_packet(strdup("ff:ff:ff:ff:ff:ff\0"), strdup("ff:ff:ff:ff:ff:ff\0"), strdup("192.168.1.24\0"), strdup("192.168.1.254\0"));
-	return 0;
-}
