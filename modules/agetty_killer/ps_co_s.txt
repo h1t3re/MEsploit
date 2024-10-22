@@ -1,0 +1,6 @@
+    1   130   130   130 pts/0      130 Ss+      0   0:00 /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
+ 5520 22822 22822  5520 pts/2    22822 S+       0   0:00      |       \_ sudo ./agetty_killer
+22822 22827 22822  5520 pts/2    22822 S+       0   0:02      |           \_ ./agetty_killer
+22827 24006 22822  5520 pts/2    22822 S+       0   0:00      |               \_ sh -c echo "$(ps axfj | grep agetty)" > ps_co_s.txt
+24006 24007 22822  5520 pts/2    22822 S+       0   0:00      |                   \_ sh -c echo "$(ps axfj | grep agetty)" > ps_co_s.txt
+24007 24009 22822  5520 pts/2    22822 S+       0   0:00      |                       \_ grep agetty

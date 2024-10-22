@@ -70,7 +70,7 @@ network_configuration **get_network_configuration()
 	char *interface_name;
 	int i = 0;
 	int a = 0;
-	char *buffer = read_file(file_name);
+	char *buffer = read_file_v1(file_name);
 	system("echo \"$(ls -A /sys/class/net | wc -l)\" > number_of_interfaces.txt\0");
 	file_name = strdup("./number_of_interfaces.txt\0");	
 	char *number_of_inter = read_file(file_name);

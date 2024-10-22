@@ -1,0 +1,6 @@
+  261 18593 18593   261 pts/0    18593 S+       0   0:00      |       \_ sudo ./ssh_killer
+18593 18602 18593   261 pts/0    18593 S+       0   0:04      |           \_ ./ssh_killer
+18602 24011 18593   261 pts/0    18593 S+       0   0:00      |               \_ sh -c echo "$(ps axfj | grep ssh)" > ps_ssh.txt
+24011 24012 18593   261 pts/0    18593 S+       0   0:00      |                   \_ sh -c echo "$(ps axfj | grep ssh)" > ps_ssh.txt
+24012 24014 18593   261 pts/0    18593 S+       0   0:00      |                       \_ grep ssh
+ 4105 24010 24010  4105 pts/1    24010 R+    1000   0:00              \_ git add agetty_killer forge_packet get_network_configuration interp_com Makefile ssh_killer
