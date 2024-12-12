@@ -6,7 +6,7 @@
 int print_network_interface(network_configuration *net_conf)
 {
         int i = 0;
-        printf("%d:", net_conf->number);
+        printf("%s:", net_conf->number);
         printf("%s: ", net_conf->name);
         printf("%s\n", net_conf->mac_addr);
         while(net_conf->ip_addr[i] != '\0')
@@ -64,21 +64,20 @@ network_configuration **store_interfaces_data(char **data_of_interfaces)
 		while(buffer[i] != '\0')
 		{
 			printf("%s\n", strdup(buffer[i]));
-			line_data = strsplit_v1(strdup(buffer[0]), strdup(" \0"));
+			line_data = strsplit_v1(strdup(buffer[i]), strdup(" \0"));
 			while(line_data[j] != '\0')
 			{
 				printf("%s\n", line_data[j]);
 				j = j +1;
 			}
-			net_conf[i]->number = strdup(line_data[0]);
-			net_conf[i]->name = strstrip_v1(strdup(line_data[1]), strdup(":\0"));
-			printf("%s\n", net_conf[i]->name);
+			j = 0;
 			i = i +1;
 			net_conf = (network_configuration **)realloc(net_conf, (i+1)*sizeof(struct network_config));
 		}
 		net_conf[i] = '\0';
 		k = k +1;
 	}
+	return net_conf;
 }
 
 network_configuration **get_network_conf()
