@@ -49,34 +49,58 @@ int free_network_config_struct(network_configuration **net_conf)
         return 0;
 }
 
+network_configuration **store_interfaces_data(char **data_of_interfaces)
+{
+	network_configuration **net_conf = (network_configuration **)malloc(sizeof(struct network_config));
+	char **buffer;
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	char **line_data;
+	while(data_of_interfaces[k] != '\0')
+	{
+		printf("%s\n", data_of_interfaces[k]);
+		buffer = strsplit_v1(strdup(data_of_interfaces[k]), strdup("\n\0"));
+		while(buffer[i] != '\0')
+		{
+			printf("%s\n", strdup(buffer[i]));
+			line_data = strsplit_v1(strdup(buffer[0]), strdup(" \0"));
+			while(line_data[j] != '\0')
+			{
+				printf("%s\n", line_data[j]);
+				j = j +1;
+			}
+			net_conf[i]->number = strdup(line_data[0]);
+			net_conf[i]->name = strstrip_v1(strdup(line_data[1]), strdup(":\0"));
+			printf("%s\n", net_conf[i]->name);
+			i = i +1;
+			net_conf = (network_configuration **)realloc(net_conf, (i+1)*sizeof(struct network_config));
+		}
+		net_conf[i] = '\0';
+		k = k +1;
+	}
+}
+
 network_configuration **get_network_conf()
 {
-        system("echo \"$(ip a)\" > net_conf.txt\0");
+        network_configuration **net_conf;
+	system("echo \"$(ip a)\" > net_conf.txt\0");
         char *file_name = strdup("/home/user/MEsploit/modules/get_network_configuration/net_conf.txt\0");
         char *mode = strdup("r\0");
         char *buffer = read_file_v1(file_name);
-        network_configuration **net_conf = (network_configuration **)malloc(10*sizeof(struct network_config *));
         char **data = (char **)malloc(sizeof(char *));
 	char *begining = (char *)malloc(3*sizeof(char));
 	char *ending = (char *)malloc(3*sizeof(char));
-        char *key;
-        char *end_of_data;
         char *number_of_interface;
-        char *t = strdup(": \0");
-        char **c0;
-        char **c1;
-        char **m;
-        char *p;
-        char *c;
         char *interface_name;
         int i = 1;
+	char *tmp;
         char *number = (char *)malloc(4*sizeof(char));
 	int a = 0;
         system("echo \"$(ls -A /sys/class/net | wc -l)\" > number_of_interfaces.txt\0");
         file_name = strdup("./number_of_interfaces.txt\0");
         char *number_of_inter = read_file_v1(file_name);
         int number_of_interfaces = atoi(number_of_inter);
-        data = strdup(" \0");
 	while(i <= number_of_interfaces)
         {
                 sprintf(number, "%s\0", convert_int_to_char(&i));
@@ -89,7 +113,8 @@ network_configuration **get_network_conf()
         	printf("%s\n", data[i-2]);
 	}
 	data[i-1] = '\0';
-        //free(buffer);
+        net_conf = store_interfaces_data(data);	
+	//free(buffer);
         //free(file_name);
         //free(t);
         //free(interface_name);
